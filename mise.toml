@@ -1,0 +1,39 @@
+[tools]
+"github:podman-desktop/podman-desktop" = "v1.25.1"
+lefthook = "2.0.16"
+node = "lts"
+podman = "5.7.1"
+uv = "0.9.27"
+
+[settings]
+lockfile = true
+
+[tasks.init-backend]
+run = "cd backend && mise exec -- uv sync --all-groups"
+
+[tasks.init-frontend]
+run = "cd frontend && mise exec -- npm install"
+
+[tasks.init]
+depends = ['init-backend', 'init-frontend']
+run = "echo 'Initialization complete'"
+
+[tasks.build-backend]
+run = "cd backend && mise exec -- podman build"
+
+[tasks.build-frontend]
+run = "cd frontend && mise exec -- podman build"
+
+[tasks.build-compose]
+depends = ['build-backend', 'build-frontend']
+run = "mise exec -- podman compose build"
+
+[tasks.serve]
+depends = ['build-compose']
+run = "mise exec -- podman compose up"
+
+[tasks.build]
+run = "echo 'Build complete'"
+
+[tasks.lint]
+run = "lefthook run pre-commit --all-files"

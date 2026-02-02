@@ -1,0 +1,13 @@
+pre-commit:
+  jobs:
+    - name: update pre-commits
+      root: "backend/"
+      run: mise exec -- uvx prek auto-update
+
+    - name: lint backend
+      root: "backend/"
+      run: mise exec -- uvx prek run --all-files
+
+    - name: lint frontend
+      root: "frontend/"
+      run: mise exec -- npm run lint

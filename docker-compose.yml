@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: upskills-backend
+    environment:
+      - DATABASE_PATH=/app/data/upskills.db
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
+      - DEBUG=false
+      - CORS_ORIGINS=["http://localhost:3000","http://localhost"]
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: upskills-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  data:

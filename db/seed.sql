@@ -1,13 +1,14 @@
 -- Seed data aligned to the screens in the UpSkills PDF
 
-INSERT INTO users (user_id, full_name, email, bio, created_at) VALUES
-  (1, 'Priya Admin', 'priya.admin@upskills.local', 'Platform administrator.', '2025-01-01 09:00:00'),
-  (2, 'Ava Mentor', 'ava.mentor@upskills.local', 'Mentor for UX and product tracks.', '2025-01-01 09:05:00'),
-  (3, 'Marco Mentor', 'marco.mentor@upskills.local', 'Mentor for frontend and data tracks.', '2025-01-01 09:10:00'),
-  (4, 'John Smith', 'john.smith@upskills.local', 'Junior UX/UI Designer mentee.', '2025-01-10 10:00:00'),
-  (5, 'Sara Lee', 'sara.lee@upskills.local', 'Frontend developer mentee.', '2025-01-10 10:05:00'),
-  (6, 'Luis Perez', 'luis.perez@upskills.local', 'Frontend developer mentee.', '2025-01-15 11:00:00'),
-  (7, 'Pat PathCreator', 'pat.pathcreator@upskills.local', 'Builds career paths and content.', '2025-01-20 09:00:00');
+-- Password for all users: password123
+INSERT INTO users (user_id, full_name, email, password_hash, bio, created_at) VALUES
+  (1, 'Priya Admin', 'priya.admin@example.com', '$2b$12$aDxIuFSPhfFO4VjYIYqSdeAbqGZ/MhMQoofQEQYB310ZMut6OvwEW', 'Platform administrator.', '2025-01-01 09:00:00'),
+  (2, 'Ava Mentor', 'ava.mentor@example.com', '$2b$12$aDxIuFSPhfFO4VjYIYqSdeAbqGZ/MhMQoofQEQYB310ZMut6OvwEW', 'Mentor for UX and product tracks.', '2025-01-01 09:05:00'),
+  (3, 'Marco Mentor', 'marco.mentor@example.com', '$2b$12$aDxIuFSPhfFO4VjYIYqSdeAbqGZ/MhMQoofQEQYB310ZMut6OvwEW', 'Mentor for frontend and data tracks.', '2025-01-01 09:10:00'),
+  (4, 'John Smith', 'john.smith@example.com', '$2b$12$aDxIuFSPhfFO4VjYIYqSdeAbqGZ/MhMQoofQEQYB310ZMut6OvwEW', 'Junior UX/UI Designer mentee.', '2025-01-10 10:00:00'),
+  (5, 'Sara Lee', 'sara.lee@example.com', '$2b$12$aDxIuFSPhfFO4VjYIYqSdeAbqGZ/MhMQoofQEQYB310ZMut6OvwEW', 'Frontend developer mentee.', '2025-01-10 10:05:00'),
+  (6, 'Luis Perez', 'luis.perez@example.com', '$2b$12$aDxIuFSPhfFO4VjYIYqSdeAbqGZ/MhMQoofQEQYB310ZMut6OvwEW', 'Frontend developer mentee.', '2025-01-15 11:00:00'),
+  (7, 'Pat PathCreator', 'pat.pathcreator@example.com', '$2b$12$aDxIuFSPhfFO4VjYIYqSdeAbqGZ/MhMQoofQEQYB310ZMut6OvwEW', 'Builds career paths and content.', '2025-01-20 09:00:00');
 
 INSERT INTO roles (role_id, name, description, max_active_paths) VALUES
   (1, 'admin', 'Full system administration.', NULL),
@@ -276,4 +277,3 @@ INSERT INTO log_entries (
     'Initial product discovery notes logged.', NULL),
   (8, 4, 4, 'General', '2025-03-05',
     'Started frontend ramp-up for supplemental learning.', 10);
-

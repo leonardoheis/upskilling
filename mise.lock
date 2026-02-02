@@ -1,0 +1,44 @@
+[[tools."github:podman-desktop/podman-desktop"]]
+version = "1.25.1"
+backend = "github:podman-desktop/podman-desktop"
+"platforms.linux-arm64" = { checksum = "sha256:698e954f50818d7ffc6f8d57a44a9eaa9e336a1ab0182d95dde79fdd5a21dbf3", url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.25.1/podman-desktop-1.25.1-arm64.tar.gz", url_api = "https://api.github.com/repos/podman-desktop/podman-desktop/releases/assets/344453085"}
+"platforms.linux-x64" = { checksum = "sha256:bdde88ac49ffc808881726ad9e0e23a36c19b87108fa01a4d75841164c2885e0", url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.25.1/podman-desktop-1.25.1-x64.tar.gz", url_api = "https://api.github.com/repos/podman-desktop/podman-desktop/releases/assets/344452619"}
+"platforms.macos-arm64" = { checksum = "sha256:b24dcce83da433af0b1b57c7c482a1a9aed45e481aeaf950ae2a4c5bc7dbbf82", url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.25.1/latest-mac.yml", url_api = "https://api.github.com/repos/podman-desktop/podman-desktop/releases/assets/344459951"}
+"platforms.macos-x64" = { checksum = "sha256:b24dcce83da433af0b1b57c7c482a1a9aed45e481aeaf950ae2a4c5bc7dbbf82", url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.25.1/latest-mac.yml", url_api = "https://api.github.com/repos/podman-desktop/podman-desktop/releases/assets/344459951"}
+"platforms.windows-x64" = { checksum = "sha256:9e6380a9e1cd27a0e30b7228ee162fc4e121d8ed2a3025a9aa001bca1262bc70", url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.25.1/podman-desktop-1.25.1-x64.zip", url_api = "https://api.github.com/repos/podman-desktop/podman-desktop/releases/assets/344453772"}
+
+[[tools.lefthook]]
+version = "2.0.16"
+backend = "aqua:evilmartians/lefthook"
+"platforms.linux-arm64" = { checksum = "sha256:23b2bafb04345f3c59f12e47c770edd50395dd781f4d20b9330d667673b33db7", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.16/lefthook_2.0.16_Linux_aarch64.gz"}
+"platforms.linux-x64" = { checksum = "sha256:a0916703db56e2457142e9e636812d511db6512ee98156a2bb1e033e09c65969", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.16/lefthook_2.0.16_Linux_x86_64.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:1c1f8d5e678425c085ad02598fa179c3a71dbc2b0a2b05321599798c7f7c6562", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.16/lefthook_2.0.16_MacOS_arm64.gz"}
+"platforms.macos-x64" = { checksum = "sha256:7532373cfe4f39608a441f3781003dcbd6349909d62602b899038f81bcf041b1", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.16/lefthook_2.0.16_MacOS_x86_64.gz"}
+"platforms.windows-x64" = { checksum = "sha256:07444502ac3ce9bb036323aae0bc5eb7e1ad9c1ea7fc32fc6d42561aa99aef66", url = "https://github.com/evilmartians/lefthook/releases/download/v2.0.16/lefthook_2.0.16_Windows_x86_64.gz"}
+
+[[tools.node]]
+version = "24.13.0"
+backend = "core:node"
+"platforms.linux-arm64" = { checksum = "sha256:0f6d40b94c6a2eb6b4c240ffc8b9fd3ada7ab044c177dd413c06e1ef9a63f081", url = "https://nodejs.org/dist/v24.13.0/node-v24.13.0-linux-arm64.tar.gz"}
+"platforms.linux-x64" = { checksum = "sha256:6223aad1a81f9d1e7b682c59d12e2de233f7b4c37475cd40d1c89c42b737ffa8", url = "https://nodejs.org/dist/v24.13.0/node-v24.13.0-linux-x64.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:d595961e563fcae057d4a0fb992f175a54d97fcc4a14dc2d474d92ddeea3b9f8", url = "https://nodejs.org/dist/v24.13.0/node-v24.13.0-darwin-arm64.tar.gz"}
+"platforms.macos-x64" = { checksum = "sha256:6f03c1b48ddbe1b129a6f8038be08e0899f05f17185b4d3e4350180ab669a7f3", url = "https://nodejs.org/dist/v24.13.0/node-v24.13.0-darwin-x64.tar.gz"}
+"platforms.windows-x64" = { checksum = "sha256:ca2742695be8de44027d71b3f53a4bdb36009b95575fe1ae6f7f0b5ce091cb88", url = "https://nodejs.org/dist/v24.13.0/node-v24.13.0-win-x64.zip"}
+
+[[tools.podman]]
+version = "5.7.1"
+backend = "github:containers/podman"
+"platforms.linux-arm64" = { checksum = "sha256:4faf15e2114166e859bfed470f0c3eb006bbdb8934399a46259b201697635e1c", url = "https://github.com/containers/podman/releases/download/v5.7.1/podman-remote-static-linux_arm64.tar.gz", url_api = "https://api.github.com/repos/containers/podman/releases/assets/326959251"}
+"platforms.linux-x64" = { checksum = "sha256:6a667c811daf2d4340cf5d8f1264c5ae9902519ca414c676514359d5c165576f", url = "https://github.com/containers/podman/releases/download/v5.7.1/podman-remote-static-linux_amd64.tar.gz", url_api = "https://api.github.com/repos/containers/podman/releases/assets/326959249"}
+"platforms.macos-arm64" = { checksum = "sha256:e5eed3ab36c93bec9738241974ff86d173bd1251621a8f2f7aec933c579f4968", url = "https://github.com/containers/podman/releases/download/v5.7.1/podman-remote-release-darwin_arm64.zip", url_api = "https://api.github.com/repos/containers/podman/releases/assets/326959244"}
+"platforms.macos-x64" = { checksum = "sha256:aa804332f8bcc8b65d34e369bcc8de9ad5d6acda9cf0a2eb4781db0626a361f1", url = "https://github.com/containers/podman/releases/download/v5.7.1/podman-remote-release-darwin_amd64.zip", url_api = "https://api.github.com/repos/containers/podman/releases/assets/326959241"}
+"platforms.windows-x64" = { checksum = "sha256:ee25e6f47c0e0f67e30528ef5f797ab18f7c08c2dae175e6834bd8c14f60bf1e", url = "https://github.com/containers/podman/releases/download/v5.7.1/podman-remote-release-windows_amd64.zip", url_api = "https://api.github.com/repos/containers/podman/releases/assets/326959247"}
+
+[[tools.uv]]
+version = "0.9.27"
+backend = "aqua:astral-sh/uv"
+"platforms.linux-arm64" = { checksum = "sha256:f80e97e1154a06e42143a173831289336ca9e34a67096ab070346958153e8e52", url = "https://github.com/astral-sh/uv/releases/download/0.9.27/uv-aarch64-unknown-linux-musl.tar.gz"}
+"platforms.linux-x64" = { checksum = "sha256:9f269bfb9c2e80808c373902af6a4af6cd5f4b4668b28c44aa09639cfed925c5", url = "https://github.com/astral-sh/uv/releases/download/0.9.27/uv-x86_64-unknown-linux-musl.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:1359538ed8664d172692cf4719ee0933a4a3bfb22fc91b0be1e19e7bdd8f5ef3", url = "https://github.com/astral-sh/uv/releases/download/0.9.27/uv-aarch64-apple-darwin.tar.gz"}
+"platforms.macos-x64" = { checksum = "sha256:3977309c5c79984c13c55d2d1cd7aa114a718eb29436c5bdb4bdfa08bf243438", url = "https://github.com/astral-sh/uv/releases/download/0.9.27/uv-x86_64-apple-darwin.tar.gz"}
+"platforms.windows-x64" = { checksum = "sha256:c3bf465d5f2b93c836f369aec9f3fa8350843f24abd5f710bb74e72440b82898", url = "https://github.com/astral-sh/uv/releases/download/0.9.27/uv-x86_64-pc-windows-msvc.zip"}
