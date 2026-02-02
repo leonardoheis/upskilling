@@ -1,59 +1,3 @@
-### Python
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Virtual environments
-.venv/
-venv/
-ENV/
-env/
-
-# Distribution / packaging
-*.egg
-*.egg-info/
-dist/
-build/
-eggs/
-parts/
-sdist/
-wheels/
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-pytest-report.xml
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Ruff
-.ruff_cache/
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
 ### React / Node
 # dependencies
 node_modules/
@@ -64,7 +8,6 @@ dist/
 
 # local env files
 .env
-.env.local
 .env.*.local
 
 # logs
@@ -74,16 +17,58 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-### IDE / OS
+# IDE / OS
 .DS_Store
 .idea/
 .vscode/
-*.swp
-*.swo
-*~
+
+# misc
+*.log
+docs
+
+### .NET / Visual Studio
+# build results
+bin/
+obj/
+out/
+
+# user-specific
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.vcxproj.user
 
 # VS Code / VS
 .vs/
 
-### Misc
-*.log
+# Rider
+.idea/
+
+# NuGet
+*.nupkg
+**/packages/*
+packages/
+nuget.config.user
+
+# test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# ASP.NET Core
+appsettings.Development.json
+appsettings.*.json
+
+# Azure
+*.publishsettings
+*.pubxml
+*.pubxml.user
+
+# others
+.dotnet/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
