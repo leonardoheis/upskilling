@@ -3,8 +3,8 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from upskills.api.dependencies import get_optional_user, require_permissions
 from upskills.api.schemas import MessageResponse
-from upskills.core import CurrentUser, handle_service_errors, require_permissions
 from upskills.domain import LogEntry
 from upskills.services import LogbookService
 
@@ -18,7 +18,7 @@ from .schemas import (
 router = APIRouter(prefix="/logbook", tags=["Logbook"])
 
 
-@router.get("/career-path/{career_path_id}", dependencies=[Depends(CurrentUser)])
+@router.get("/career-path/{career_path_id}", dependencies=[Depends(get_optional_user)])
 @inject
 async def get_logbook_entries(
     career_path_id: int,
@@ -31,7 +31,6 @@ async def get_logbook_entries(
 
 @router.post("", status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_permissions("logbook.create"))])
 @inject
-@handle_service_errors
 async def create_logbook_entry(
     data: LogEntryCreate,
     service: Annotated[LogbookService, Depends(Provide["logbook_service"])],
@@ -48,7 +47,7 @@ async def create_logbook_entry(
     return LogEntryResponse.model_validate(result.model_dump())
 
 
-@router.get("/{log_entry_id}", dependencies=[Depends(CurrentUser)])
+@router.get("/{log_entry_id}", dependencies=[Depends(get_optional_user)])
 @inject
 async def get_logbook_entry(
     log_entry_id: int,

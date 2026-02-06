@@ -3,10 +3,9 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
+from upskills.api.dependencies import get_optional_user, require_permissions
 from upskills.api.schemas import MessageResponse, PaginatedResponse
-from upskills.core import CurrentUser, require_permissions
 from upskills.domain import Career
-from upskills.repositories import User
 from upskills.services import CareerService
 
 from .schemas import (
@@ -19,7 +18,7 @@ from .schemas import (
 router = APIRouter(prefix="/careers", tags=["Careers"])
 
 
-@router.get("", dependencies=[Depends(CurrentUser)])
+@router.get("", dependencies=[Depends(get_optional_user)])
 @inject
 async def list_careers(
     service: Annotated[CareerService, Depends(Provide["career_service"])],
@@ -42,19 +41,22 @@ async def list_careers(
     )
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_permissions("career.create"))],
+)
 @inject
 async def create_career(
     data: CareerCreate,
     service: Annotated[CareerService, Depends(Provide["career_service"])],
-    _: Annotated[User, Depends(require_permissions("career.create"))],
 ) -> CareerResponse:
     career = Career(name=data.name, specialization=data.specialization)
     result = await service.create_career(career)
     return CareerResponse.model_validate(result.model_dump())
 
 
-@router.get("/{career_id}", dependencies=[Depends(CurrentUser)])
+@router.get("/{career_id}", dependencies=[Depends(get_optional_user)])
 @inject
 async def get_career(
     career_id: int,

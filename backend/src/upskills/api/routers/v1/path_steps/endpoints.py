@@ -3,8 +3,8 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from upskills.api.dependencies import get_optional_user, require_permissions
 from upskills.api.schemas import MessageResponse
-from upskills.core import CurrentUser, handle_service_errors, require_permissions
 from upskills.domain import PathStep
 from upskills.services import PathStepService
 
@@ -18,7 +18,7 @@ from .schemas import (
 router = APIRouter(prefix="/steps", tags=["Path Steps"])
 
 
-@router.get("/templates/{path_id}/steps", dependencies=[Depends(CurrentUser)])
+@router.get("/templates/{path_id}/steps", dependencies=[Depends(get_optional_user)])
 @inject
 async def list_steps(
     path_id: int,
@@ -34,7 +34,6 @@ async def list_steps(
     dependencies=[Depends(require_permissions("path_content.add"))],
 )
 @inject
-@handle_service_errors
 async def create_step(
     path_id: int,
     data: PathStepCreate,
@@ -51,7 +50,7 @@ async def create_step(
     return PathStepResponse.model_validate(result.model_dump())
 
 
-@router.get("/{step_id}", dependencies=[Depends(CurrentUser)])
+@router.get("/{step_id}", dependencies=[Depends(get_optional_user)])
 @inject
 async def get_step(
     step_id: int,

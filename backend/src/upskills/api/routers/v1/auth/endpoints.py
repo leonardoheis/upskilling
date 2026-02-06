@@ -3,8 +3,9 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from upskills.api.schemas import MessageResponse, RoleResponse, UserResponse
-from upskills.core import CurrentUser, handle_service_errors
+from upskills.api.dependencies import authenticated
+from upskills.api.schemas import MessageResponse, UserResponse
+from upskills.domain import User
 from upskills.services import AuthService
 
 from .schemas import (
@@ -22,7 +23,6 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 @inject
-@handle_service_errors
 async def register(
     data: RegisterRequest,
     service: Annotated[AuthService, Depends(Provide["auth_service"])],
@@ -81,7 +81,6 @@ async def request_password_reset(
     service: Annotated[AuthService, Depends(Provide["auth_service"])],
 ) -> MessageResponse:
     token = await service.request_password_reset(data.email)
-
     if token:
         pass
 
@@ -92,31 +91,30 @@ async def request_password_reset(
 
 @router.post("/password-reset")
 @inject
-@handle_service_errors
 async def reset_password(
     data: PasswordReset,
     service: Annotated[AuthService, Depends(Provide["auth_service"])],
 ) -> MessageResponse:
-    success = await service.reset_password(data.token, data.new_password)
+    try:
+        success = await service.reset_password(data.token, data.new_password)
 
-    if success:
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Failed to reset password.",
+            )
+
         return MessageResponse(message="Password has been reset successfully.")
-    raise HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail="Failed to reset password.",
-    )
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        ) from e
 
 
 @router.get("/me")
 async def get_current_user_info(
-    current_user: CurrentUser,
+    current_user: Annotated[User, Depends(authenticated)],
 ) -> UserResponse:
-    roles = [RoleResponse.model_validate(ur.role.to_dict()) for ur in (current_user.roles or []) if ur.role]
-    return UserResponse(
-        user_id=current_user.user_id,
-        full_name=current_user.full_name,
-        email=current_user.email,
-        bio=current_user.bio,
-        created_at=current_user.created_at,
-        roles=roles,
-    )
+    return UserResponse.model_validate(current_user.model_dump())

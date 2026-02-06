@@ -3,9 +3,9 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
+from upskills.api.dependencies import authenticated, require_permissions
 from upskills.api.schemas import MessageResponse, PaginatedResponse
-from upskills.core import CurrentUser, handle_service_errors, require_permissions
-from upskills.domain import Team
+from upskills.domain import Team, User
 from upskills.services import TeamService
 
 from .schemas import (
@@ -35,7 +35,7 @@ async def list_teams(
 
     items = [TeamListResponse.model_validate(t.model_dump()) for t in teams]
 
-    return PaginatedResponse(
+    return PaginatedResponse[TeamListResponse](
         items=items,
         total=total,
         page=page,
@@ -48,7 +48,7 @@ async def list_teams(
 @inject
 async def get_my_managed_teams(
     service: Annotated[TeamService, Depends(Provide["team_service"])],
-    current_user: CurrentUser,
+    current_user: Annotated[User, Depends(authenticated)],
 ) -> list[TeamWithMembersResponse]:
     teams = await service.get_teams_by_manager(current_user.user_id)
     return [TeamWithMembersResponse.model_validate(t.model_dump()) for t in teams]
@@ -58,7 +58,7 @@ async def get_my_managed_teams(
 @inject
 async def get_teams_im_member_of(
     service: Annotated[TeamService, Depends(Provide["team_service"])],
-    current_user: CurrentUser,
+    current_user: Annotated[User, Depends(authenticated)],
 ) -> list[TeamResponse]:
     teams = await service.get_teams_for_user(current_user.user_id)
     return [TeamResponse.model_validate(t.model_dump()) for t in teams]
@@ -66,7 +66,6 @@ async def get_teams_im_member_of(
 
 @router.post("", status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_permissions("team.manage"))])
 @inject
-@handle_service_errors
 async def create_team(
     data: TeamCreate,
     service: Annotated[TeamService, Depends(Provide["team_service"])],
@@ -95,7 +94,6 @@ async def get_team(
 
 @router.put("/{team_id}", dependencies=[Depends(require_permissions("team.manage"))])
 @inject
-@handle_service_errors
 async def update_team(
     team_id: int,
     data: TeamUpdate,
@@ -142,7 +140,6 @@ async def get_team_members(
 
 @router.post("/{team_id}/members", dependencies=[Depends(require_permissions("team.manage"))])
 @inject
-@handle_service_errors
 async def add_team_member(
     team_id: int,
     data: TeamMemberAdd,

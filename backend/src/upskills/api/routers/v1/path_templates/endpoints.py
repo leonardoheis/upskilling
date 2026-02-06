@@ -3,8 +3,8 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
+from upskills.api.dependencies import get_optional_user, require_permissions
 from upskills.api.schemas import MessageResponse, PaginatedResponse
-from upskills.core import CurrentUser, handle_service_errors, require_permissions
 from upskills.domain import PathTemplate
 from upskills.services import PathTemplateService
 
@@ -13,7 +13,7 @@ from .schemas import PathTemplateCreate, PathTemplateResponse, PathTemplateUpdat
 router = APIRouter(prefix="/paths", tags=["Path Templates"])
 
 
-@router.get("", dependencies=[Depends(CurrentUser)])
+@router.get("", dependencies=[Depends(get_optional_user)])
 @inject
 async def list_paths(
     service: Annotated[PathTemplateService, Depends(Provide["path_template_service"])],
@@ -28,7 +28,7 @@ async def list_paths(
 
     items = [PathTemplateResponse.model_validate(p.model_dump()) for p in paths]
 
-    return PaginatedResponse(
+    return PaginatedResponse[PathTemplateResponse](
         items=items,
         total=total,
         page=page,
@@ -41,7 +41,6 @@ async def list_paths(
     "", status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_permissions("path_template.create"))]
 )
 @inject
-@handle_service_errors
 async def create_path(
     data: PathTemplateCreate,
     service: Annotated[PathTemplateService, Depends(Provide["path_template_service"])],
@@ -58,7 +57,7 @@ async def create_path(
     return PathTemplateResponse.model_validate(result.model_dump())
 
 
-@router.get("/{path_id}", dependencies=[Depends(CurrentUser)])
+@router.get("/{path_id}", dependencies=[Depends(get_optional_user)])
 @inject
 async def get_path(
     path_id: int,

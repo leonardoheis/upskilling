@@ -6,7 +6,7 @@ from .base import DomainModel
 
 
 class User(DomainModel):
-    user_id: int | None = None
+    user_id: int
     full_name: str | None = None
     email: str | None = None
     password: str | None = None

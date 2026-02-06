@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+
+from upskills.api.dependencies import authenticated
 
 from .auth import router as auth_router
 from .careers import router as careers_router
@@ -9,8 +11,7 @@ from .progress import router as progress_router
 from .teams import router as teams_router
 from .users import router as users_router
 
-# Create the v1 router that includes all sub-routers
-router = APIRouter(prefix="/api/v1")
+router = APIRouter(prefix="/api/v1", dependencies=[Depends(authenticated)])
 
 router.include_router(auth_router)
 router.include_router(users_router)
