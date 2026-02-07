@@ -74,7 +74,7 @@ class BaseRepository[ModelT: Base]:
             result = await session.execute(stmt)
             return result.scalar() or 0
 
-    async def create(self, data: dict[str, Any]) -> ModelT:
+    async def create(self, data: dict[str, Any] | BaseModel) -> ModelT:
         data_dict = _to_dict(data)
         async with self._db_provider.session() as session:
             instance = self._model(**data_dict)

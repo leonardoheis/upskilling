@@ -47,9 +47,9 @@ class MenteeProgressSummary(DomainModel):
 
 
 class UserStepProgress(DomainModel):
-    user_step_progress_id: int | None = None
-    user_path_assignment_id: int | None = None
-    step_id: int | None = None
+    user_step_progress_id: int
+    user_path_assignment_id: int
+    step_id: int
     status: str | None = None
     progress_percent: int = 0
     planned_start_date: date | None = None
@@ -61,9 +61,9 @@ class UserStepProgress(DomainModel):
 
 
 class UserPathAssignment(DomainModel):
-    user_path_assignment_id: int | None = None
-    user_career_path_id: int | None = None
-    path_template_id: int | None = None
+    user_path_assignment_id: int
+    user_career_path_id: int
+    path_template_id: int
     start_date: date | None = None
     deadline: date | None = None
     status: str | None = None
@@ -74,9 +74,9 @@ class UserPathAssignment(DomainModel):
 
 
 class UserCareerPath(DomainModel):
-    user_career_path_id: int | None = None
-    user_id: int | None = None
-    career_id: int | None = None
+    user_career_path_id: int
+    user_id: int
+    career_id: int
     start_date: date | None = None
     end_date: date | None = None
     overall_progress_percent: int = 0

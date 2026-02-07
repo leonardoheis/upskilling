@@ -55,16 +55,11 @@ async def get_my_profile(
 @router.put("/me")
 @inject
 async def update_my_profile(
-    data: UserUpdate,
+    user: UserUpdate,
     service: Annotated[UserService, Depends(Provide["user_service"])],
     current_user: Annotated[UserDomain, Depends(authenticated)],
 ) -> UserResponse:
-    user = UserDomain(
-        full_name=data.full_name,
-        email=data.email,
-        bio=data.bio,
-    )
-    result = await service.update_user(current_user.user_id, user)
+    result = await service.update_user(current_user.user_id, user.full_name, user.email, user.bio)
 
     if not result:
         raise HTTPException(

@@ -18,9 +18,9 @@ class LogEntryType(StrEnum):
 
 
 class LogEntry(DomainModel):
-    log_entry_id: int | None = None
-    user_id: int | None = None
-    user_career_path_id: int | None = None
+    log_entry_id: int
+    user_id: int
+    user_career_path_id: int
     entry_type: str | None = None
     entry_date: date | None = None
     notes: str | None = None

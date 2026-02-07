@@ -1,67 +1,53 @@
-from dependency_injector.wiring import Provide, inject
+from dataclasses import dataclass
+
+from dependency_injector.wiring import Provide
 
 from upskills.domain import PathStep
 from upskills.repositories import PathStepRepository, PathTemplateRepository
 
-CREATE_FIELDS = {"step_order", "name", "description", "duration_hours", "course_link"}
-UPDATE_FIELDS = {"step_order", "name", "description", "duration_hours", "course_link"}
 
-
+@dataclass
 class PathStepService:
-    @inject
-    def __init__(
-        self,
-        path_step_repository: PathStepRepository = Provide["path_step_repository"],
-        path_template_repository: PathTemplateRepository = Provide["path_template_repository"],
-    ) -> None:
-        self._path_step_repository = path_step_repository
-        self._path_template_repository = path_template_repository
+    path_step_repository: PathStepRepository = Provide["path_step_repository"]
+    path_template_repository: PathTemplateRepository = Provide["path_template_repository"]
 
-    async def get_step(self, step_id: int) -> PathStep | None:
-        step = await self._path_step_repository.get_by_id(step_id)
+    async def get(self, step_id: int) -> PathStep | None:
+        step = await self.path_step_repository.get_by_id(step_id)
         if not step:
             return None
-        return self._path_step_repository.to_domain(step)
+        return self.path_step_repository.to_domain(step)
 
-    async def get_steps_for_path(self, path_template_id: int) -> list[PathStep]:
-        steps = await self._path_step_repository.get_by_path_template(path_template_id)
-        return [self._path_step_repository.to_domain(s) for s in steps]
+    async def get_for_path(self, path_template_id: int) -> list[PathStep]:
+        steps = await self.path_step_repository.get_by_path_template(path_template_id)
+        return [self.path_step_repository.to_domain(s) for s in steps]
 
-    async def create_step(self, path_template_id: int, step: PathStep) -> PathStep:
-        path = await self._path_template_repository.get_by_id(path_template_id)
+    async def create(self, path_step_: PathStep) -> PathStep:
+        path = await self.path_template_repository.get_by_id(path_step_.path_template_id, id_column="path_template_id")
         if not path:
             msg = "Path template not found"
             raise ValueError(msg)
 
-        create_data = step.model_dump(include=CREATE_FIELDS)
-        create_data["path_template_id"] = path_template_id
+        path_step = await self.path_step_repository.create(path_step_)
+        return self.path_step_repository.to_domain(path_step)
 
-        created = await self._path_step_repository.create(create_data)
-        return self._path_step_repository.to_domain(created)
-
-    async def update_step(self, step_id: int, step: PathStep) -> PathStep | None:
-        step_db = await self._path_step_repository.get_by_id(step_id)
-        if not step_db:
+    async def update(self, step_id: int, path_step_: PathStep) -> PathStep | None:
+        path_step = await self.path_step_repository.get_by_id(step_id, id_column="step_id")
+        if not path_step:
             return None
+        updated_path_step = await self.path_step_repository.update(path_step, path_step_)
+        return self.path_step_repository.to_domain(updated_path_step)
 
-        update_data = step.model_dump(include=UPDATE_FIELDS, exclude_none=True)
-
-        if update_data:
-            step_db = await self._path_step_repository.update(step_db, update_data)
-
-        return self._path_step_repository.to_domain(step_db)
-
-    async def delete_step(self, step_id: int) -> bool:
-        step = await self._path_step_repository.get_by_id(step_id)
-        if not step:
+    async def delete(self, step_id: int) -> bool:
+        path_step = await self.path_step_repository.get_by_id(step_id, id_column="step_id")
+        if not path_step:
             return False
-        await self._path_step_repository.delete(step)
+        await self.path_step_repository.delete(path_step)
         return True
 
     async def add_dependency(self, step_id: int, depends_on_step_id: int) -> bool:
-        await self._path_step_repository.add_dependency(step_id, depends_on_step_id)
+        await self.path_step_repository.add_dependency(step_id, depends_on_step_id)
         return True
 
     async def remove_dependency(self, step_id: int, depends_on_step_id: int) -> bool:
-        await self._path_step_repository.remove_dependency(step_id, depends_on_step_id)
+        await self.path_step_repository.remove_dependency(step_id, depends_on_step_id)
         return True

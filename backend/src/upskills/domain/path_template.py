@@ -5,8 +5,8 @@ from .path_step import PathStep
 
 
 class PathTemplate(DomainModel):
-    path_template_id: int | None = None
-    career_id: int | None = None
+    path_template_id: int
+    career_id: int
     name: str | None = None
     description: str | None = None
     duration_hours: int | None = None

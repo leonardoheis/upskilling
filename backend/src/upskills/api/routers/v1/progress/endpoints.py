@@ -41,8 +41,8 @@ async def get_my_career_paths(
     current_user: Annotated[User, Depends(authenticated)],
     service: Annotated[ProgressService, Depends(Provide["progress_service"])],
 ) -> list[UserCareerPathDetailResponse]:
-    results = await service.get_user_career_paths(current_user.user_id)
-    return [UserCareerPathDetailResponse.model_validate(r.model_dump()) for r in results]
+    paths = await service.get_user_paths(current_user.user_id)
+    return [UserCareerPathDetailResponse.model_validate(p.model_dump()) for p in paths]
 
 
 @router.get("/career-paths/{career_path_id}", dependencies=[Depends(authenticated)])
@@ -51,7 +51,7 @@ async def get_career_path(
     career_path_id: int,
     service: Annotated[ProgressService, Depends(Provide["progress_service"])],
 ) -> UserCareerPathDetailResponse:
-    result = await service.get_career_path(career_path_id)
+    result = await service.get_path(career_path_id)
 
     if not result:
         raise HTTPException(
@@ -76,7 +76,7 @@ async def assign_career_path(
         start_date=data.start_date,
         end_date=data.end_date,
     )
-    result = await service.assign_career_path(career_path)
+    result = await service.assign(career_path)
     return UserCareerPathResponse.model_validate(result.model_dump())
 
 
@@ -91,7 +91,7 @@ async def update_career_path(
         start_date=data.start_date,
         end_date=data.end_date,
     )
-    result = await service.update_career_path(career_path_id, career_path)
+    result = await service.update(career_path_id, career_path)
 
     if not result:
         raise HTTPException(

@@ -9,8 +9,8 @@ class PathStepDependency(DomainModel):
 
 
 class PathStep(DomainModel):
-    step_id: int | None = None
-    path_template_id: int | None = None
+    step_id: int
+    path_template_id: int
     step_order: int | None = None
     name: str | None = None
     description: str | None = None

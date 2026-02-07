@@ -24,8 +24,8 @@ async def list_steps(
     path_id: int,
     service: Annotated[PathStepService, Depends(Provide["path_step_service"])],
 ) -> list[PathStepResponse]:
-    results = await service.get_steps_for_path(path_id)
-    return [PathStepResponse.model_validate(r.model_dump()) for r in results]
+    steps = await service.get_for_path(path_id)
+    return [PathStepResponse.model_validate(s.model_dump()) for s in steps]
 
 
 @router.post(
@@ -40,13 +40,14 @@ async def create_step(
     service: Annotated[PathStepService, Depends(Provide["path_step_service"])],
 ) -> PathStepResponse:
     step = PathStep(
+        path_template_id=path_id,
         step_order=data.step_order,
         name=data.name,
         description=data.description,
         duration_hours=data.duration_hours,
         course_link=data.course_link,
     )
-    result = await service.create_step(path_id, step)
+    result = await service.create(step)
     return PathStepResponse.model_validate(result.model_dump())
 
 
@@ -56,7 +57,7 @@ async def get_step(
     step_id: int,
     service: Annotated[PathStepService, Depends(Provide["path_step_service"])],
 ) -> PathStepResponse:
-    result = await service.get_step(step_id)
+    result = await service.get(step_id)
 
     if not result:
         raise HTTPException(
@@ -81,7 +82,7 @@ async def update_step(
         duration_hours=data.duration_hours,
         course_link=data.course_link,
     )
-    result = await service.update_step(step_id, step)
+    result = await service.update(step_id, step)
 
     if not result:
         raise HTTPException(
@@ -98,7 +99,7 @@ async def delete_step(
     step_id: int,
     service: Annotated[PathStepService, Depends(Provide["path_step_service"])],
 ) -> MessageResponse:
-    success = await service.delete_step(step_id)
+    success = await service.delete(step_id)
 
     if not success:
         raise HTTPException(

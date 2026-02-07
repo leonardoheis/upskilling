@@ -23,7 +23,7 @@ async def list_paths(
 ) -> PaginatedResponse[PathTemplateResponse]:
     skip = (page - 1) * page_size
 
-    paths, total = await service.get_all_paths(skip=skip, limit=page_size, career_id=career_id)
+    paths, total = await service.get_all(skip=skip, limit=page_size, career_id=career_id)
     total_pages = (total + page_size - 1) // page_size if total > 0 else 1
 
     items = [PathTemplateResponse.model_validate(p.model_dump()) for p in paths]
@@ -53,7 +53,7 @@ async def create_path(
         default_start_offset_days=data.default_start_offset_days,
         default_deadline_offset_days=data.default_deadline_offset_days,
     )
-    result = await service.create_path(path)
+    result = await service.create(path)
     return PathTemplateResponse.model_validate(result.model_dump())
 
 
@@ -63,7 +63,7 @@ async def get_path(
     path_id: int,
     service: Annotated[PathTemplateService, Depends(Provide["path_template_service"])],
 ) -> PathTemplateWithStepsResponse:
-    result = await service.get_path(path_id)
+    result = await service.get(path_id)
 
     if not result:
         raise HTTPException(
@@ -88,7 +88,7 @@ async def update_path(
         default_start_offset_days=data.default_start_offset_days,
         default_deadline_offset_days=data.default_deadline_offset_days,
     )
-    result = await service.update_path(path_id, path)
+    result = await service.update(path_id, path)
 
     if not result:
         raise HTTPException(
@@ -105,7 +105,7 @@ async def delete_path(
     path_id: int,
     service: Annotated[PathTemplateService, Depends(Provide["path_template_service"])],
 ) -> MessageResponse:
-    success = await service.delete_path(path_id)
+    success = await service.delete(path_id)
 
     if not success:
         raise HTTPException(
