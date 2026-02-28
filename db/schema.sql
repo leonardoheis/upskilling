@@ -4,7 +4,6 @@ CREATE TABLE users (
   user_id INTEGER PRIMARY KEY,
   full_name TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
-  password_hash TEXT NOT NULL,
   bio TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -137,3 +136,4 @@ CREATE TABLE log_entries (
   related_user_path_assignment_id INTEGER
     REFERENCES user_path_assignments(user_path_assignment_id)
 );
+
