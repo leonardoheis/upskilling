@@ -1,13 +1,37 @@
-### React / Node
-# dependencies
-node_modules/
+### Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+*.egg
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+pytest-report.xml
+coverage.xml
 
-# production
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+### React / Node
+node_modules/
 build/
 dist/
 
 # local env files
 .env
+.env.local
 .env.*.local
 
 # logs
@@ -17,58 +41,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# IDE / OS
+### IDE / OS
 .DS_Store
 .idea/
 .vscode/
+.vs/
+*.swp
+*.swo
+*~
 
 # misc
 *.log
-docs
-
-### .NET / Visual Studio
-# build results
-bin/
-obj/
-out/
-
-# user-specific
-*.user
-*.userosscache
-*.suo
-*.userprefs
-*.vcxproj.user
-
-# VS Code / VS
-.vs/
-
-# Rider
-.idea/
-
-# NuGet
-*.nupkg
-**/packages/*
-packages/
-nuget.config.user
-
-# test results
-TestResults/
-*.trx
-*.coverage
-*.coveragexml
-
-# ASP.NET Core
-appsettings.Development.json
-appsettings.*.json
-
-# Azure
-*.publishsettings
-*.pubxml
-*.pubxml.user
-
-# others
-.dotnet/
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
+data/
