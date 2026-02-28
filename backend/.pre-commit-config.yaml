@@ -1,0 +1,39 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.0
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+
+  - repo: https://github.com/pycqa/pylint
+    rev: "v4.0.4"
+    hooks:
+    -   id: pylint
+        additional_dependencies:
+          - pydantic>=2.10.0
+          - sqlalchemy>=2.0.36
+          - fastapi>=0.115.0
+          - dependency-injector>=4.48.1
+
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - pydantic>=2.10.0
+          - pydantic-settings>=2.6.0
+          - sqlalchemy>=2.0.36
+          - fastapi>=0.115.0
+          - uvicorn>=0.32.0
+          - dependency-injector>=4.48.1

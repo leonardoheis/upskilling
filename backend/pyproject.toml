@@ -1,0 +1,212 @@
+[build-system]
+requires = ["uv-build"]
+build-backend = "uv_build"
+
+[project]
+name = "upskills"
+version = "0.1.0"
+description = "UpSkills - Career development and upskilling platform API"
+#readme = "README.md"
+license = { text = "MIT" }
+requires-python = "==3.12.*"
+authors = [
+    { name = "UpSkills Team" }
+]
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "aiosqlite>=0.20.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "dependency-injector>=4.48.1",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.20",
+    "email-validator>=2.2.0",
+]
+
+[tool.uv]
+default-groups = [
+    "dev",
+    "test",
+]
+
+[dependency-groups]
+test = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "polyfactory>=2.18.0",
+    "httpx>=0.28.0",
+]
+dev = [
+    "uv>=0.8.0",
+    "poethepoet>=0.37.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+    "pre-commit-uv>=4.1.4",
+]
+
+
+#########################
+# Tasks
+#########################
+
+[tool.poe.tasks]
+serve = "uv run python -m upskills"
+test = "uv run pytest"
+format = "uv run pre-commit run --all-files --verbose"
+lint = "uv run ruff check src tests"
+typecheck = "uv run mypy src"
+check-coverage = "uv run coverage report --fail-under=80"
+docker-build = "docker buildx build --progress plain -t upskills-backend ."
+docker-run = "docker container run --env-file .env --publish 8000:8000 upskills-backend"
+
+
+#########################
+# Pytest
+#########################
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = [
+    "-r=A",
+    "--junitxml=pytest-report.xml",
+    "--cov=.",
+    "--cov-branch",
+    "--cov-report=xml",
+    "--cov-report=html",
+    "--cov-report=term-missing:skip-covered",
+    "-vvv",
+]
+
+
+#########################
+# Coverage
+#########################
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["src", "tests"]
+omit = [
+    "**/__main__.py",
+    "src/upskills/main.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+
+#########################
+# MyPy
+#########################
+
+[tool.mypy]
+strict = true
+follow_imports = "normal"
+python_version = "3.12"
+disallow_any_unimported = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+ignore_missing_imports = false
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_untyped_decorators = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = [
+    "passlib.*",
+    "jose.*",
+    "dependency_injector.*",
+]
+ignore_missing_imports = true
+
+
+#########################
+# RUFF
+#########################
+
+[tool.ruff]
+fix = true
+preview = true
+unsafe-fixes = true
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["ALL"]
+ignore = [
+    "D",      # pydocstyle
+    "CPY",    # copyright notices
+    "S101",   # assert usage
+    "ISC001", # implicit string concat
+    "ANN401", # any type
+    "COM812", # trailing comma
+    "E501",   # line too long (handled by formatter)
+    "B008",   # function calls in defaults (FastAPI Depends)
+    "ARG002", # unused method argument
+    "RUF067", # __init__ module logic (FastAPI router pattern)
+    "S105",   # hardcoded password (dev defaults in pydantic settings)
+    "S107",   # hardcoded password in default (false positive on token_type)
+    "DOC501", # raised exception missing from docstring
+    "DOC502", # documented exception from inner function (API docs clarity)
+]
+
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+
+#########################
+# Pylint
+#########################
+
+[tool.pylint.main]
+extension-pkg-allow-list = ["mypy","dependency_injector","pydantic_settings"]
+
+[tool.pylint.typecheck]
+generated-members = ["sqlalchemy.func.*"]
+contextmanager-decorators = ["contextlib.contextmanager"]
+ignore-none = true
+ignore-on-opaque-inference = true
+ignored-checks-for-mixins = [
+    "no-member",
+    "not-async-context-manager",
+    "not-context-manager",
+    "attribute-defined-outside-init",
+]
+ignored-classes = ["optparse.Values", "thread._local", "_thread._local"]
+missing-member-hint = true
+missing-member-hint-distance = 1
+missing-member-max-choices = 1
+mixin-class-rgx = ".*[Mm]ixin"
+
+[tool.pylint.messages_control]
+disable = [
+    "C0114",  # missing-module-docstring
+    "C0115",  # missing-class-docstring
+    "C0116",  # missing-function-docstring
+    "C0301",  # line-too-long (handled by ruff format)
+    "E0401",  # import-error (already validated by mypy)
+    "R0801",  # duplicate-code (acceptable for response builders)
+    "R0903",  # too-few-public-methods (dataclasses/DTOs)
+    "R0913",  # too-many-arguments (DI constructors)
+    "R0917",  # too-many-positional-arguments (DI constructors)
+]
+
+
+#########################
+# Bandit
+#########################
+
+[tool.bandit]
+skips = ["B101"]
